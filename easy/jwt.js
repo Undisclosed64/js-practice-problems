@@ -32,11 +32,12 @@ function signJwt(username, password) {
   if (!response.success) {
     return null;
   } else {
-    const token = jwt.sign(username, jwtPassword);
+    const token = jwt.sign({ username }, jwtPassword);
     return token;
   }
 }
 // console.log(signJwt("abc@gmail.com", "1234567"));
+
 /**
  * Verifies a JWT using a secret key.
  *
@@ -46,20 +47,19 @@ function signJwt(username, password) {
  *                    using the secret key.
  */
 function verifyJwt(token) {
-  // Your code here
-  return new Promise(function (resolve) {
-    jwt.verify(token, jwtPassword, function (err) {
-      if (err) {
-        resolve(false);
-      } else {
-        resolve(true);
-      }
-    });
-  });
+  try {
+    jwt.verify(token, jwtPassword);
+    return true;
+  } catch (err) {
+    return false;
+  }
 }
-// verifyJwt("hhhhh").then((res) => {
-//   console.log(res);
-// });
+
+// console.log(
+//   verifyJwt(
+//     "JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiY0BnbWFpbC5jb20iLCJpYXQiOjE3MDQyNzM4MzN9.6vpnl4NPQuvor5YSiPGuyZGbtI-DbpzaSfZFV4ASAcA"
+//   )
+// );
 
 /**
  * Decodes a JWT to reveal its payload without verifying its authenticity.
@@ -73,16 +73,18 @@ function decodeJwt(token) {
   if (decode === null) {
     return false;
   } else {
-    return decode;
+    return true;
   }
 }
-decodeJwt(
-  "eyJhbGci1NiJ9.YWJjQGdtYWlsLmNvbQ.upY4MtniAA98YNSuR74lps8KOBb8nIBj3_3YrtmrKn0"
-);
+// console.log(
+//   decodeJwt(
+//     "eyJhbGciOiJIUzI1NiJ9.YWJjQGdtYWlsLmNvbQ.upY4MtniAA98YNSuR74lps8KOBb8nIBj3_3YrtmrKn0"
+//   )
+// );
 
-// module.exports = {
-//   signJwt,
-//   verifyJwt,
-//   decodeJwt,
-//   jwtPassword,
-// };
+module.exports = {
+  signJwt,
+  verifyJwt,
+  decodeJwt,
+  jwtPassword,
+};
